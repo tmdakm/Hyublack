@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>查询页面</title>
+	<style>
+		#searchbox {
+			width: 200px;
+			height: 25px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			padding: 5px;
+			font-size: 16px;
+		}
+
+		#result {
+			margin-top: 10px;
+			height: 100px;
+			overflow-y: scroll;
+		}
+	</style>
+</head>
+<body>
+	<h1>查询页面</h1>
+	
+	<input type="text" id="searchbox" placeholder="输入数字...">
+	<button onclick="checkInput()">搜索</button>
+
+	<div id="result"></div>
+
+	<script>
+		function checkInput() {
+			var searchKey = document.getElementById("searchbox").value;
+			var result = document.getElementById("result");
+			var html = "";
+
+			// 检查搜索关键字是否为空或非纯数字
+			if (searchKey === "" || !/^\d+$/.test(searchKey)) {
+				result.innerHTML = "<p>输入内容有误！必须为纯数字。</p>";
+				return;
+			}
+
+			// 检查链接是否存在，存在则访问，否则提示不存在
+			var url = "http://blacklist.huangyu.info/" + searchKey + "/" + searchKey + ".html";
+			var xhr = new XMLHttpRequest();
+			xhr.open("GET", url, true);
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4) {
+					if (xhr.status === 200) {
+						window.location.href = url;
+					} else {
+						result.innerHTML = "<p>内容不存在！</p>";
+					}
+				}
+			};
+			xhr.send();
+		}
+	</script>
+</body>
+</html>
